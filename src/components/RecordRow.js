@@ -7,7 +7,9 @@ const RecordRow = ({ record }) => {
       <td>{record.album}</td>
       <td>{record.origin}</td>
       <td>{record.og}</td>
-      <td>{record.condition}</td>
+      {record.condition !== '' ?
+        <td className="negative">{record.condition}</td> : <td></td>
+      }
       <td>{record.mono}</td>
       <td>{record.genre}</td>
       <td>{record.notes}</td>

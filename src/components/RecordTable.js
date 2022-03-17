@@ -13,10 +13,10 @@ class RecordTable extends React.Component {
   render() {
     return (
       <div className="records-container">
-        <table>
+        <table className="ui sortable celled table">
           <thead>
             <tr>
-              <th>Artist</th>
+              <th className="sorted ascending">Artist</th>
               <th>Album</th>
               <th>Origin</th>
               <th>OG?</th>

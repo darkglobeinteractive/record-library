@@ -1,6 +1,8 @@
 import React, { Component, request } from 'react';
 import axios from 'axios';
 import csv from 'csvtojson';
+import FilterArtist from './FilterArtist';
+import FilterGenre from './FilterGenre';
 import RecordTable from './RecordTable';
 
 class App extends Component {
@@ -13,12 +15,12 @@ class App extends Component {
     this.state = {
       records: [],
       filters: {
-        artist: false,
-        genre: false
+        artist: '',
+        genre: ''
       },
       sorting: {
-        artist: false,
-        album: false
+        artist: '',
+        album: ''
       }
     }
 
@@ -66,6 +68,20 @@ class App extends Component {
 
   }
 
+  renderFilters() {
+    if (this.state.records.length === 0) {
+      return <></>;
+    }
+    return (
+      <div>
+        <strong>Filter By:</strong>
+        <FilterArtist />
+        <FilterGenre />
+        <button className="ui button">Reset All</button>
+      </div>
+    );
+  }
+
   // Helper function will return a loading screen until we've got records in state
   renderTable() {
     if (this.state.records.length === 0) {
@@ -78,7 +94,10 @@ class App extends Component {
 
   render() {
     return (
-      <div>{this.renderTable()}</div>
+      <div>
+        {this.renderFilters()}
+        {this.renderTable()}
+      </div>
     );
   }
 }
