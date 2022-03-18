@@ -70,13 +70,57 @@ class App extends Component {
 
   }
 
+  handleResetAll = () => {
+    console.log('resetting');
+    const recordsArr = this.state.records.sort((a, b) => (a.order > b.order) ? 1 : -1);
+    this.setState({
+      records: recordsArr,
+      filters: {
+        artist: '',
+        genre: ''
+      },
+      sorting: {
+        artist: '',
+        album: ''
+      }
+    });
+  }
+
+  handleColumnSorting = (col) => {
+    let artistOrder, albumOrder = '';
+    let recordsArr = [];
+    if (col === 'artist') {
+      artistOrder = (this.state.sorting.artist === '' ? 'ascending' : (this.state.sorting.artist === 'ascending' ? 'descending' : 'ascending'));
+      if (artistOrder === 'ascending') {
+        recordsArr = this.state.records.sort((a, b) => (a.artist > b.artist) ? 1 : (a.artist === b.artist) ? ((a.album > b.album) ? 1 : -1) : -1);
+      } else {
+        recordsArr = this.state.records.sort((a, b) => (a.artist > b.artist) ? -1 : (a.artist === b.artist) ? ((a.album < b.album) ? -1 : 1) : 1 )
+      }
+    }
+    if (col === 'album') {
+      albumOrder = (this.state.sorting.album === '' ? 'ascending' : (this.state.sorting.album === 'ascending' ? 'descending' : 'ascending'));
+      if (albumOrder === 'ascending') {
+        recordsArr = this.state.records.sort((a, b) => (a.album > b.album) ? 1 : -1);
+      } else {
+        recordsArr = this.state.records.sort((a, b) => (a.album > b.album) ? -1 : 1);
+      }
+    }
+    this.setState({
+      records: recordsArr,
+      sorting: {
+        album: albumOrder,
+        artist: artistOrder
+      }
+    });
+  }
+
   renderFilters() {
     return (
       <div className="ui segment">
         <strong>Filter By:</strong>
         <FilterArtist />
         <FilterGenre />
-        <button className="ui button">Reset All</button>
+        <button className="ui button" onClick={() => this.handleResetAll()}>Reset All</button>
       </div>
     );
   }
@@ -84,7 +128,7 @@ class App extends Component {
   // Helper function will return a loading screen until we've got records in state
   renderTable() {
     return (
-      <RecordTable records={this.state.records} sorting={this.state.sorting} />
+      <RecordTable records={this.state.records} sorting={this.state.sorting} columnSort={this.handleColumnSorting} />
     );
   }
 

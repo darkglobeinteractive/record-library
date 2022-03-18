@@ -11,3 +11,11 @@
   height: 100%;
   width: 100%;
 }
+
+.ui.sortable.table thead th.no-sort {
+  cursor: default;
+}
+.ui.sortable.table thead th.no-sort:hover {
+  color: rgb(0, 0, 0, 0.87);
+  background: #f9fafb;
+}
