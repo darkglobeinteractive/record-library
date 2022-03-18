@@ -19,3 +19,7 @@
   color: rgb(0, 0, 0, 0.87);
   background: #f9fafb;
 }
+
+.records-container .table tr.hide {
+  display: none;
+}

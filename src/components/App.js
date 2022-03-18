@@ -1,6 +1,7 @@
 import React, { Component, request } from 'react';
 import axios from 'axios';
 import csv from 'csvtojson';
+import _ from 'lodash';
 import './App.css';
 import FilterArtist from './FilterArtist';
 import FilterGenre from './FilterGenre';
@@ -47,22 +48,29 @@ class App extends Component {
       .fromString(res.data)
       .then((jsonObj) => {
 
-        // Populate the state.records array with records data
+        // Create an array to hold the records
+        const recordsArr = [];
+
+        // Populate the records array
         for(let i = 0; i < jsonObj.length; i++) {
-          this.setState({
-            records: [...this.state.records, {
-              'order': i+1,
-              'artist': jsonObj[i]['Artist'],
-              'album': jsonObj[i]['Album'],
-              'origin': jsonObj[i]['Origin'],
-              'og': jsonObj[i]['OG / Reissue'],
-              'condition': jsonObj[i]['Condition'],
-              'mono': jsonObj[i]['Mono?'],
-              'genre': jsonObj[i]['Filed'],
-              'notes': jsonObj[i]['Notes']
-            }]
+          recordsArr.push({
+            'order': i+1,
+            'artist': jsonObj[i]['Artist'],
+            'album': jsonObj[i]['Album'],
+            'origin': jsonObj[i]['Origin'],
+            'og': jsonObj[i]['OG / Reissue'],
+            'condition': jsonObj[i]['Condition'],
+            'mono': jsonObj[i]['Mono?'],
+            'genre': jsonObj[i]['Filed'],
+            'notes': jsonObj[i]['Notes'],
+            'visibility': 'show'
           });
         }
+
+        // Set the records state with final array
+        this.setState({
+          records: recordsArr
+        });
 
       });
 
@@ -71,8 +79,9 @@ class App extends Component {
   }
 
   handleResetAll = () => {
-    console.log('resetting');
-    const recordsArr = this.state.records.sort((a, b) => (a.order > b.order) ? 1 : -1);
+    const recordsArr = this.state.records.sort((a, b) => (a.order > b.order) ? 1 : -1).map(record => {
+      return {...record, visibility: 'show'};
+    });
     this.setState({
       records: recordsArr,
       filters: {
@@ -114,12 +123,37 @@ class App extends Component {
     });
   }
 
+  handleFilters = (filter, value) => {
+    console.log('Values: '+filter+' -- '+value);
+    const genreFilter = (filter === 'genre' ? value : this.state.filters.genre);
+    const artistFilter = (filter === 'artist' ? value : this.state.filters.artist);
+    const recordsArr = this.state.records.map(record => {
+      let visibility = 'show';
+      if (genreFilter !== '' && record.genre !== genreFilter) {
+        visibility = 'hide';
+      }
+      if (artistFilter !== '' && record.artist !== artistFilter) {
+        visibility = 'hide';
+      }
+      return {...record, visibility};
+    });
+    this.setState({
+      records: recordsArr,
+      filters: {
+        artist: artistFilter,
+        genre: genreFilter
+      }
+    })
+  }
+
   renderFilters() {
+    const genres = _.sortedUniq(_.sortBy(this.state.records.map(record => record.genre)));
+    const artists = _.sortedUniq(_.sortBy(this.state.records.map(record => record.artist)));
     return (
       <div className="ui segment">
         <strong>Filter By:</strong>
-        <FilterArtist />
-        <FilterGenre />
+        <FilterArtist artists={artists} selectedArtist={this.state.filters.artist} setArtist={this.handleFilters} />
+        <FilterGenre genres={genres} selectedGenre={this.state.filters.genre} setGenre={this.handleFilters} />
         <button className="ui button" onClick={() => this.handleResetAll()}>Reset All</button>
       </div>
     );
