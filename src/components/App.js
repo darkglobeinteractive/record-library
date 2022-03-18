@@ -1,9 +1,11 @@
 import React, { Component, request } from 'react';
 import axios from 'axios';
 import csv from 'csvtojson';
+import './App.css';
 import FilterArtist from './FilterArtist';
 import FilterGenre from './FilterGenre';
 import RecordTable from './RecordTable';
+import Spinner from './Spinner';
 
 class App extends Component {
 
@@ -69,11 +71,8 @@ class App extends Component {
   }
 
   renderFilters() {
-    if (this.state.records.length === 0) {
-      return <></>;
-    }
     return (
-      <div>
+      <div className="ui segment">
         <strong>Filter By:</strong>
         <FilterArtist />
         <FilterGenre />
@@ -84,17 +83,19 @@ class App extends Component {
 
   // Helper function will return a loading screen until we've got records in state
   renderTable() {
-    if (this.state.records.length === 0) {
-      return <div>Loading...</div>;
-    }
     return (
-      <RecordTable records={this.state.records} />
+      <RecordTable records={this.state.records} sorting={this.state.sorting} />
     );
   }
 
   render() {
+    if (this.state.records.length === 0) {
+      return (
+        <Spinner message="Loading" />
+      );
+    }
     return (
-      <div>
+      <div className="ui segment">
         {this.renderFilters()}
         {this.renderTable()}
       </div>

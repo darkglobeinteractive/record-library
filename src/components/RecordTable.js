@@ -11,13 +11,17 @@ class RecordTable extends React.Component {
 
   // We know state has records so we don't need logic here
   render() {
+
+    const artistClasses = "sorted ascending";
+    const albumClasses = "sorted descending";
+
     return (
-      <div className="records-container">
+      <div className="ui segment records-container">
         <table className="ui sortable celled table">
           <thead>
             <tr>
-              <th className="sorted ascending">Artist</th>
-              <th>Album</th>
+              <th className={artistClasses}>Artist</th>
+              <th className={albumClasses}>Album</th>
               <th>Origin</th>
               <th>OG?</th>
               <th>Condition</th>
