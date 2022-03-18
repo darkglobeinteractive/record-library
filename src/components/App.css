@@ -21,5 +21,11 @@
 }
 
 .records-container .table tr.hide {
-  display: none;
+  display: none !important;
+}
+
+@media only screen and (max-width: 767px) {
+  .records-container .table thead {
+    display: none !important;
+  }
 }
