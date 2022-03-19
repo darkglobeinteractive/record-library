@@ -12,4 +12,4 @@ Application URL:
 https://lps.darkglobedevelopment.com/
 
 Information Architecture:
-https://cms.darkglobedevelopment.com/wp-content/uploads/2022/03/Record-Library-Project.v.1.0.pdf
+https://cms.darkglobedevelopment.com/wp-content/uploads/2022/03/Record-Library-Project.v.1.1.pdf

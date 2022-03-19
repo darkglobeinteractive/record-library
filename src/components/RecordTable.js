@@ -6,7 +6,13 @@ class RecordTable extends React.Component {
   // Render the record rows from the props.records array
   renderRecords() {
     return this.props.records.map((record, index) => {
-      return <RecordRow key={index} record={record} />;
+      return (
+        <RecordRow
+          key={index}
+          record={record}
+          setArtist={this.props.setArtist}
+        />
+      );
     });
   }
 

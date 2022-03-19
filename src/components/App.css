@@ -50,15 +50,6 @@
 
 @media only screen and (max-width: 767px) {
 
-  /* RECORDS ------------------------------------------------------ */
-  .records-container .table thead {
-    display: none !important;
-  }
-
-}
-
-@media only screen and (max-width: 550px) {
-
   /* FILTERS ------------------------------------------------------ */
   .ui.segment.filters {
     flex-flow: column wrap;
@@ -70,6 +61,9 @@
   }
 
   /* RECORDS ------------------------------------------------------ */
+  .records-container .table thead {
+    display: none !important;
+  }
   .records-container .ui.table tr {
     position: relative;
   }

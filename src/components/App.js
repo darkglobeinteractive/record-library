@@ -224,6 +224,7 @@ class App extends Component {
         records={this.state.records}
         sorting={this.state.sorting}
         columnSort={this.handleColumnSorting}
+        setArtist={this.handleFilters}
       />
     );
   }
