@@ -240,6 +240,7 @@ class App extends Component {
     // Otherwise, return the Filters and Records
     return (
       <div className="ui segment">
+        <h1 className="ui header">My Record Collection</h1>
         {this.renderFilters()}
         {this.renderTable()}
       </div>
