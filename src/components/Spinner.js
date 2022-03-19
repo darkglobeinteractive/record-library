@@ -1,5 +1,6 @@
 import React from 'react';
 
+// This is simply a loading screen
 const Spinner = props => {
   return (
     <div id="spinner" className="ui segment">

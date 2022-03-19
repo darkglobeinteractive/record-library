@@ -3,15 +3,17 @@ import RecordRow from './RecordRow';
 
 class RecordTable extends React.Component {
 
+  // Render the record rows from the props.records array
   renderRecords() {
     return this.props.records.map((record, index) => {
       return <RecordRow key={index} record={record} />;
     });
   }
 
-  // We know state has records so we don't need logic here
+  // We can render without worry because we're checking for state.records.length > 0 in App.js
   render() {
 
+    // Create possible sorting classes for the Artist or Album table headers
     let artistClasses = 'default';
     if (this.props.sorting.artist !== '') {
       artistClasses = `sorted ${this.props.sorting.artist}`;

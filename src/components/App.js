@@ -78,10 +78,15 @@ class App extends Component {
 
   }
 
+  // Handle the Reset All button clicks
   handleResetAll = () => {
+
+    // Create an array that resets the original order of the records and sets them all to visible
     const recordsArr = this.state.records.sort((a, b) => (a.order > b.order) ? 1 : -1).map(record => {
       return {...record, visibility: 'show'};
     });
+
+    // Reset the state
     this.setState({
       records: recordsArr,
       filters: {
@@ -93,27 +98,51 @@ class App extends Component {
         album: ''
       }
     });
+
   }
 
-  handleColumnSorting = (col) => {
+  // Handle the sorting via column headers
+  handleColumnSorting = col => {
+
+    // Set default order values and create an empty array to hold the sorted records
     let artistOrder, albumOrder = '';
     let recordsArr = [];
+
+    // Handle Artist column sorting
     if (col === 'artist') {
+
+      // Determine the new sorting direction
       artistOrder = (this.state.sorting.artist === '' ? 'ascending' : (this.state.sorting.artist === 'ascending' ? 'descending' : 'ascending'));
+
+      // If ascending: artists ASC, albums ASC
       if (artistOrder === 'ascending') {
         recordsArr = this.state.records.sort((a, b) => (a.artist > b.artist) ? 1 : (a.artist === b.artist) ? ((a.album > b.album) ? 1 : -1) : -1);
+
+      // If descending: artists DESC, albums ASC
       } else {
         recordsArr = this.state.records.sort((a, b) => (a.artist > b.artist) ? -1 : (a.artist === b.artist) ? ((a.album < b.album) ? -1 : 1) : 1 )
       }
+
     }
+
+    // Handle Album column sorting
     if (col === 'album') {
+
+      // Determine the new sorting direction
       albumOrder = (this.state.sorting.album === '' ? 'ascending' : (this.state.sorting.album === 'ascending' ? 'descending' : 'ascending'));
+
+      // If ascending: albums ASC
       if (albumOrder === 'ascending') {
         recordsArr = this.state.records.sort((a, b) => (a.album > b.album) ? 1 : -1);
+
+      // If descending: albums DESC
       } else {
         recordsArr = this.state.records.sort((a, b) => (a.album > b.album) ? -1 : 1);
       }
+
     }
+
+    // Set the state
     this.setState({
       records: recordsArr,
       sorting: {
@@ -121,22 +150,38 @@ class App extends Component {
         artist: artistOrder
       }
     });
+
   }
 
+  // Handle the filters
   handleFilters = (filter, value) => {
-    console.log('Values: '+filter+' -- '+value);
+
+    // Filters are additive, so retain existing filter state if it's not being set here
     const genreFilter = (filter === 'genre' ? value : this.state.filters.genre);
     const artistFilter = (filter === 'artist' ? value : this.state.filters.artist);
+
+    // Create array to hold new records state
     const recordsArr = this.state.records.map(record => {
+
+      // Set default visibility to show the record
       let visibility = 'show';
+
+      // If we're filtering by genre and this record isn't of that genre, hide the record
       if (genreFilter !== '' && record.genre !== genreFilter) {
         visibility = 'hide';
       }
+
+      // If we're filtering by artist and this record isn't by that artist, hide the record
       if (artistFilter !== '' && record.artist !== artistFilter) {
         visibility = 'hide';
       }
+
+      // Return the record with the visibility set
       return {...record, visibility};
+
     });
+
+    // Set the state
     this.setState({
       records: recordsArr,
       filters: {
@@ -146,39 +191,62 @@ class App extends Component {
     })
   }
 
+  // Render the filters section
   renderFilters() {
+
+    // Create arrays of unique artists and genres sorted ASC
     const genres = _.sortedUniq(_.sortBy(this.state.records.map(record => record.genre)));
     const artists = _.sortedUniq(_.sortBy(this.state.records.map(record => record.artist)));
+
+    // Return the JSX
     return (
-      <div className="ui segment">
-        <strong>Filter By:</strong>
-        <FilterArtist artists={artists} selectedArtist={this.state.filters.artist} setArtist={this.handleFilters} />
-        <FilterGenre genres={genres} selectedGenre={this.state.filters.genre} setGenre={this.handleFilters} />
-        <button className="ui button" onClick={() => this.handleResetAll()}>Reset All</button>
+      <div className="ui segment filters">
+        <div className="title">Filter By:</div>
+        <FilterArtist
+          artists={artists}
+          selectedArtist={this.state.filters.artist}
+          setArtist={this.handleFilters}
+        />
+        <FilterGenre
+          genres={genres}
+          selectedGenre={this.state.filters.genre}
+          setGenre={this.handleFilters}
+        />
+        <button className="ui button reset-all" onClick={() => this.handleResetAll()}>Reset All</button>
       </div>
     );
   }
 
-  // Helper function will return a loading screen until we've got records in state
+  // Render the RecordTable component
   renderTable() {
     return (
-      <RecordTable records={this.state.records} sorting={this.state.sorting} columnSort={this.handleColumnSorting} />
+      <RecordTable
+        records={this.state.records}
+        sorting={this.state.sorting}
+        columnSort={this.handleColumnSorting}
+      />
     );
   }
 
   render() {
+
+    // If there are no records, only show the Spinner component
     if (this.state.records.length === 0) {
       return (
         <Spinner message="Loading" />
       );
     }
+
+    // Otherwise, return the Filters and Records
     return (
       <div className="ui segment">
         {this.renderFilters()}
         {this.renderTable()}
       </div>
     );
+
   }
+
 }
 
 export default App;

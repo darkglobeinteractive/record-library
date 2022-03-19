@@ -1,8 +1,10 @@
+/* GLOBAL CSS --------------------------------------------------- */
 #root {
   position: relative;
   height: 100vh;
 }
 
+/* SPINNER ------------------------------------------------------ */
 #spinner {
   position: absolute;
   z-index: 100;
@@ -10,6 +12,27 @@
   top: 0;
   height: 100%;
   width: 100%;
+}
+
+/* FILTERS ------------------------------------------------------ */
+.ui.segment.filters,
+.ui.segment.filters * {
+  box-sizing: border-box;
+}
+.ui.segment.filters {
+  display: flex;
+  align-items: center;
+}
+.ui.segment.filters div {
+  padding-right: 1em;
+}
+.ui.segment.filters .title {
+  font-weight: 700;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.ui.segment.filters .ui.button.reset-all {
+  white-space: nowrap;
 }
 
 .ui.sortable.table thead th.no-sort {
@@ -20,12 +43,47 @@
   background: #f9fafb;
 }
 
+/* RECORDS ------------------------------------------------------ */
 .records-container .table tr.hide {
   display: none !important;
 }
 
 @media only screen and (max-width: 767px) {
+
+  /* RECORDS ------------------------------------------------------ */
   .records-container .table thead {
     display: none !important;
   }
+
+}
+
+@media only screen and (max-width: 550px) {
+
+  /* FILTERS ------------------------------------------------------ */
+  .ui.segment.filters {
+    flex-flow: column wrap;
+    text-align: center;
+  }
+  .ui.segment.filters div {
+    width: 100%;
+    padding: 0 0 0.5em;
+  }
+
+  /* RECORDS ------------------------------------------------------ */
+  .records-container .ui.table tr {
+    position: relative;
+  }
+  .records-container .ui.table tr td.no-mobile {
+    display: none !important;
+  }
+  .records-container .ui.table tr td.genre {
+    position: absolute !important;
+    right: 7px;
+    top: 7px;
+    border: 1px solid #ccc !important;
+  }
+  .records-container .ui.table tr td.empty {
+    display: none !important;
+  }
+
 }
